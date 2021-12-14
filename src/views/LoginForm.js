@@ -62,7 +62,7 @@ class LoginForm extends React.Component {
         const token = responseJson.token;
         localStorage.setItem("jwt", token);
         UserStore.isLoggedIn = true;
-        LoginForm.forceUpdate();
+        this.forceUpdate();
       })
       .catch((error) => {
         console.log(error);
@@ -76,6 +76,35 @@ class LoginForm extends React.Component {
       password: "test123",
       buttonDisabled: false,
     });
+  }
+  
+  async doLogout() {
+    const url = "http://localhost:3000/user/logout";
+
+    await fetch(url)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+      })
+      .then((responseJson) => {
+        console.log(responseJson);
+        const token = responseJson.token;
+        UserStore.token = token;
+        UserStore.isLoggedIn = false;
+        UserStore.username = "";
+        console.log(token);
+        this.forceUpdate();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      this.setState({
+        buttonDisabled: false,
+      });
   }
 
   render() {
@@ -92,7 +121,7 @@ class LoginForm extends React.Component {
         <div className="app">
           <div className="container">
             Welcome {UserStore.username}
-            <SubmitButton
+            <SubmitButton href="/home"
               text={"Log out"}
               disabled={false}
               onClick={() => this.doLogout()}

@@ -1,7 +1,7 @@
 import React from "react";
 import InputField from "../components/Login/InputField";
 import SubmitButton from "../components/Login/SubmitButton";
-import UserStore  from "../stores/UserStore";
+import UserStore from "../stores/UserStore";
 
 class SignupForm extends React.Component {
   constructor(props) {
@@ -65,7 +65,8 @@ class SignupForm extends React.Component {
       .then((responseJson) => {
         console.log(responseJson);
         const token = responseJson.token;
-        UserStore.cookie = token;
+        UserStore.token = token;
+        UserStore.username = this.username;
         // localStorage.setItem("jwt", token);
       })
       .catch((error) => {
@@ -85,33 +86,31 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="loginform">
-          Sign Up
-          <InputField
-            type="email"
-            placeholder="Email"
-            value={this.state.email ? this.state.email : ""}
-            onChange={(val) => this.setInputValue("email", val)}
-          />
-          <InputField
-            type="text"
-            placeholder="Username"
-            value={this.state.username ? this.state.username : ""}
-            onChange={(val) => this.setInputValue("username", val)}
-          />
-          <InputField
-            type="password"
-            placeholder="Password"
-            value={this.state.password ? this.state.password : ""}
-            onChange={(val) => this.setInputValue("password", val)}
-          />
-          <SubmitButton
-            text="Sign Up"
-            // disabled={this.state.buttonDisabled}
-            onClick={() => this.doSignup()}
-          />
-        </div>
+      <div className="loginform">
+        Sign Up
+        <InputField
+          type="email"
+          placeholder="Email"
+          value={this.state.email ? this.state.email : ""}
+          onChange={(val) => this.setInputValue("email", val)}
+        />
+        <InputField
+          type="text"
+          placeholder="Username"
+          value={this.state.username ? this.state.username : ""}
+          onChange={(val) => this.setInputValue("username", val)}
+        />
+        <InputField
+          type="password"
+          placeholder="Password"
+          value={this.state.password ? this.state.password : ""}
+          onChange={(val) => this.setInputValue("password", val)}
+        />
+        <SubmitButton
+          text="Sign Up"
+          // disabled={this.state.buttonDisabled}
+          onClick={() => this.doSignup()}
+        />
       </div>
     );
   }

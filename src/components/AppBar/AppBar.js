@@ -9,19 +9,23 @@ import FormControl from "react-bootstrap/FormControl";
 import Button from "react-bootstrap/Button";
 import UserStore from "../../stores/UserStore";
 
-class AppBar extends React.Component { 
+class AppBar extends React.Component {
 
   render() {
     return (
       <Navbar bg="light" expand={false}>
         <Container fluid>
-          <Navbar.Brand href="#">
+          <Navbar.Brand href="/">
             {!UserStore.loggedIn ? "Welcome " : "Welcome"}
             {UserStore.username}
           </Navbar.Brand>
-          <Navbar.Brand href="/signUp">
-            SignUp
+          <Navbar.Brand href="/home">Home</Navbar.Brand>
+          <Navbar.Brand href="/data">Weather</Navbar.Brand>
+          <Navbar.Brand href="/login">Login</Navbar.Brand>
+          <Navbar.Brand href="/logout">
+            Logout
           </Navbar.Brand>
+          <Navbar.Brand href="/signUp">SignUp</Navbar.Brand>
           <Navbar.Toggle aria-controls="offcanvasNavbar" />
           <Navbar.Offcanvas
             id="offcanvasNavbar"
