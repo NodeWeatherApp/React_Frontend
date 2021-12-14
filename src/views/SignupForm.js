@@ -1,14 +1,14 @@
 import React from "react";
-import InputField from "./InputField";
-import SubmitButton from "./SubmitButton";
-import UserStore from "../../stores/UserStore";
+import InputField from "../components/Login/InputField";
+import SubmitButton from "../components/Login/SubmitButton";
+import UserStore from "../stores/UserStore";
 
-class LoginForm extends React.Component {
+class SignupForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "testswagger@getMaxListeners.com",
-      password: "test123",
+      email: "",
+      password: "",
       buttonDisabled: false,
     };
   }
@@ -23,19 +23,22 @@ class LoginForm extends React.Component {
     });
   }
 
-  async doLogin() {
+  async doSignup() {
     if (!this.state.email) {
       return;
     }
     if (!this.state.password) {
       return;
     }
+    if (!this.state.username) {
+      return;
+    }
+
     this.setState({
       buttonDisabled: true,
     });
 
-  
-    const url = "http://localhost:3000/user/login";
+    const url = "http://localhost:3000/user/signUp";
     const requestOptions = {
       method: "POST",
       headers: {
@@ -44,9 +47,11 @@ class LoginForm extends React.Component {
       },
       body: JSON.stringify({
         email: this.state.email,
+        username: this.state.username,
         password: this.state.password,
       }),
     };
+    console.log(requestOptions);
 
     await fetch(url, requestOptions)
       .then((response) => {
@@ -59,9 +64,10 @@ class LoginForm extends React.Component {
       })
       .then((responseJson) => {
         console.log(responseJson);
-        UserStore.username = responseJson.username;
         const token = responseJson.token;
-        localStorage.setItem("jwt", token);
+        UserStore.token = token;
+        UserStore.username = this.username;
+        // localStorage.setItem("jwt", token);
       })
       .catch((error) => {
         console.log(error);
@@ -71,8 +77,9 @@ class LoginForm extends React.Component {
 
   resetForm() {
     this.setState({
-      email: "testswagger@getMaxListeners.com",
-      password: "test123",
+      email: "",
+      username: "",
+      password: "",
       buttonDisabled: false,
     });
   }
@@ -80,12 +87,18 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="loginform">
-        Log in
+        Sign Up
         <InputField
           type="email"
           placeholder="Email"
           value={this.state.email ? this.state.email : ""}
           onChange={(val) => this.setInputValue("email", val)}
+        />
+        <InputField
+          type="text"
+          placeholder="Username"
+          value={this.state.username ? this.state.username : ""}
+          onChange={(val) => this.setInputValue("username", val)}
         />
         <InputField
           type="password"
@@ -94,13 +107,13 @@ class LoginForm extends React.Component {
           onChange={(val) => this.setInputValue("password", val)}
         />
         <SubmitButton
-          text="Login"
-          disabled={this.state.buttonDisabled}
-          onClick={() => this.doLogin()}
+          text="Sign Up"
+          // disabled={this.state.buttonDisabled}
+          onClick={() => this.doSignup()}
         />
       </div>
     );
   }
 }
 
-export default LoginForm;
+export default SignupForm;

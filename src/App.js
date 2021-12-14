@@ -1,8 +1,12 @@
 import React from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { observer } from "mobx-react";
 import UserStore from "./stores/UserStore";
-import LoginForm from "./components/Login/LoginForm";
-import SubmitButton from "./components/Login/SubmitButton";
+import AppBar from "./components/AppBar/AppBar";
+import LoginForm from "./views/LoginForm";
+import SignupForm from "./views/SignupForm";
+import HomePage from "./views/HomePage";
 import "./App.css";
 
 class App extends React.Component {
@@ -32,57 +36,22 @@ class App extends React.Component {
     }
   }
 
-  async doLogout() {
-    try {
-      let res = await fetch("/logout", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-
-      let result = await res.json();
-
-      if (result && result.success) {
-        UserStore.isLoggedIn = false;
-        UserStore.username = "";
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
   render() {
-    if (UserStore.loading) {
-      return (
-        <div className="app">
-          <div className="container">Loading, please wait..</div>
+    return (
+      <div className="app">
+        <AppBar />
+        <div className="container">
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/signup" element={<SignupForm />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/logout" element={<HomePage />} />
+            </Routes>
+          </BrowserRouter>
         </div>
-      );
-    } else {
-      if (UserStore.isLoggedIn) {
-        return (
-          <div className="app">
-            <div className="container">Welcome {UserStore.username}</div>
-            <SubmitButton
-              text={"Log out"}
-              disabled={false}
-              onClick={() => this.doLogout()}
-            />
-          </div>
-        );
-      }
-      return (
-        <div className="app">
-          <div className="container">
-          
-            <LoginForm />
-            
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 }
 
