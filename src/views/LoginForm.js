@@ -1,7 +1,7 @@
 import React from "react";
-import InputField from "./InputField";
-import SubmitButton from "./SubmitButton";
-import UserStore from "../../stores/UserStore";
+import InputField from "../components/Login/InputField";
+import SubmitButton from "../components/Login/SubmitButton";
+import UserStore from "../stores/UserStore";
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -34,7 +34,6 @@ class LoginForm extends React.Component {
       buttonDisabled: true,
     });
 
-  
     const url = "http://localhost:3000/user/login";
     const requestOptions = {
       method: "POST",
@@ -62,6 +61,8 @@ class LoginForm extends React.Component {
         UserStore.username = responseJson.username;
         const token = responseJson.token;
         localStorage.setItem("jwt", token);
+        UserStore.isLoggedIn = true;
+        LoginForm.forceUpdate();
       })
       .catch((error) => {
         console.log(error);
@@ -78,28 +79,53 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    return (
-      <div className="loginform">
-        Log in
-        <InputField
-          type="email"
-          placeholder="Email"
-          value={this.state.email ? this.state.email : ""}
-          onChange={(val) => this.setInputValue("email", val)}
-        />
-        <InputField
-          type="password"
-          placeholder="Password"
-          value={this.state.password ? this.state.password : ""}
-          onChange={(val) => this.setInputValue("password", val)}
-        />
-        <SubmitButton
-          text="Login"
-          disabled={this.state.buttonDisabled}
-          onClick={() => this.doLogin()}
-        />
-      </div>
-    );
+    // if (UserStore.loading) {
+    //   return (
+    //     <div className="app">
+    //       <div className="container">Loading, please wait..</div>
+    //     </div>
+    //   );
+    // }
+
+    if (UserStore.isLoggedIn) {
+      return (
+        <div className="app">
+          <div className="container">
+            Welcome {UserStore.username}
+            <SubmitButton
+              text={"Log out"}
+              disabled={false}
+              onClick={() => this.doLogout()}
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="container">
+          <div className="loginform">
+            Log in
+            <InputField
+              type="email"
+              placeholder="Email"
+              value={this.state.email ? this.state.email : ""}
+              onChange={(val) => this.setInputValue("email", val)}
+            />
+            <InputField
+              type="password"
+              placeholder="Password"
+              value={this.state.password ? this.state.password : ""}
+              onChange={(val) => this.setInputValue("password", val)}
+            />
+            <SubmitButton
+              text="Login"
+              disabled={this.state.buttonDisabled}
+              onClick={() => this.doLogin()}
+            />
+          </div>
+        </div>
+      );
+    }
   }
 }
 

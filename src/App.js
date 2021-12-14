@@ -1,8 +1,11 @@
 import React from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import { observer } from "mobx-react";
 import UserStore from "./stores/UserStore";
-import LoginForm from "./components/Login/LoginForm";
-import SubmitButton from "./components/Login/SubmitButton";
+import AppBar from "./components/AppBar/AppBar";
+import LoginForm from "./views/LoginForm";
+import SignupForm from "./views/SignupForm";
 import "./App.css";
 
 class App extends React.Component {
@@ -54,35 +57,17 @@ class App extends React.Component {
   }
 
   render() {
-    if (UserStore.loading) {
-      return (
-        <div className="app">
-          <div className="container">Loading, please wait..</div>
-        </div>
-      );
-    } else {
-      if (UserStore.isLoggedIn) {
-        return (
-          <div className="app">
-            <div className="container">Welcome {UserStore.username}</div>
-            <SubmitButton
-              text={"Log out"}
-              disabled={false}
-              onClick={() => this.doLogout()}
-            />
-          </div>
-        );
-      }
-      return (
-        <div className="app">
-          <div className="container">
-          
-            <LoginForm />
-            
-          </div>
-        </div>
-      );
-    }
+    return (
+      <div className="app">
+        <BrowserRouter>
+          <AppBar />
+          <Routes>
+            <Route path="/login" element={<LoginForm />} />
+            <Route path ="/signup" element={<SignupForm />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    );
   }
 }
 
