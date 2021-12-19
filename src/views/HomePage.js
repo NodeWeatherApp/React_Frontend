@@ -2,6 +2,8 @@ import { React, Component } from "react";
 import axios from "axios";
 import * as ReactBootStrap from "react-bootstrap";
 
+import AddWeather from "../components/HomePage/WeatherModal";
+
 class HomePage extends Component {
   state = {};
 
@@ -47,7 +49,7 @@ class HomePage extends Component {
       .get(`weather/${this.state.locationId}`)
       .then((res) => {
         console.log(res.data.weather);
-        this.setState({weather: res.data.weather});
+        this.setState({ weather: res.data.weather });
       })
       .catch((err) => console.error(err));
   };
@@ -65,7 +67,12 @@ class HomePage extends Component {
 
   renderLocations = (location, index) => {
     return (
-      <ReactBootStrap.Dropdown.Item key={index} eventKey={location.id} onClick={this.fetchWeather} href="">
+      <ReactBootStrap.Dropdown.Item
+        key={index}
+        eventKey={location.id}
+        onClick={this.fetchWeather}
+        href=""
+      >
         {location.country}, {location.city}
       </ReactBootStrap.Dropdown.Item>
     );
@@ -75,9 +82,17 @@ class HomePage extends Component {
     if (this.state.locations) {
       return (
         <div>
-          <div>
-            <h2>Weather Data </h2>
-          </div>
+          <ReactBootStrap.Container fluid>
+            <ReactBootStrap.Row>
+              <ReactBootStrap.Col>
+                <h2>Weather Data </h2>
+              </ReactBootStrap.Col>
+              <ReactBootStrap.Col>
+                <AddWeather />
+              </ReactBootStrap.Col>
+            </ReactBootStrap.Row>
+          </ReactBootStrap.Container>
+
           <div>
             <ReactBootStrap.DropdownButton
               id="dropdown-basic-button"
