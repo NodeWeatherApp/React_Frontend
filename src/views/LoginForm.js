@@ -7,8 +7,8 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "testswagger@getMaxListeners.com",
-      password: "test123",
+      email: "test@gmail.com",
+      password: "password",
       buttonDisabled: false,
     };
   }
@@ -53,7 +53,7 @@ class LoginForm extends React.Component {
           return response.json();
         } else {
           this.resetForm();
-          throw new Error("Something went wrong");
+          throw new Error("Something went wrong with Login");
         }
       })
       .then((responseJson) => {
@@ -61,8 +61,6 @@ class LoginForm extends React.Component {
         UserStore.username = responseJson.username;
         const token = responseJson.token;
         localStorage.setItem("jwt", token);
-        UserStore.isLoggedIn = true;
-        this.forceUpdate();
       })
       .catch((error) => {
         console.log(error);
@@ -72,59 +70,89 @@ class LoginForm extends React.Component {
 
   resetForm() {
     this.setState({
-      email: "testswagger@getMaxListeners.com",
-      password: "test123",
+      email: "test@gmail.com",
+      password: "password",
       buttonDisabled: false,
     });
   }
-  
+
   async doLogout() {
     const url = "http://localhost:3000/user/logout";
-
-    await fetch(url)
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    };
+    
+     await fetch(url, requestOptions)
       .then((response) => {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error("Something went wrong");
+          throw new Error("Something went wrong with Logout");
         }
       })
       .then((responseJson) => {
         console.log(responseJson);
         const token = responseJson.token;
-        UserStore.token = token;
-        UserStore.isLoggedIn = false;
-        UserStore.username = "";
         console.log(token);
-        this.forceUpdate();
+        localStorage.setItem("jwt", token);
       })
       .catch((error) => {
         console.log(error);
       });
 
-      this.setState({
-        buttonDisabled: false,
+    this.setState({
+      buttonDisabled: false,
+    });
+  }
+
+  async isLoggedIn() {
+    const url = "http://localhost:3000/user/isLoggedIn";
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "auth-token": localStorage.getItem("jwt"),
+      },
+    };
+    let res = null
+    await fetch(url, requestOptions)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong with check");
+        }
+      })
+      .then((responseJson) => {
+        console.log(responseJson.auth);
+        res = responseJson.auth;
+      })
+      .catch((error) => {
+        console.log(error);
       });
+      UserStore.isLoggedIn = res;
+      return res;
   }
 
   render() {
-    // if (UserStore.loading) {
-    //   return (
-    //     <div className="app">
-    //       <div className="container">Loading, please wait..</div>
-    //     </div>
-    //   );
-    // }
-
+    let loggedIn = this.isLoggedIn();
+    console.log(loggedIn)
     if (UserStore.isLoggedIn) {
       return (
         <div className="app">
           <div className="container">
-            Welcome {UserStore.username}
-            <SubmitButton href="/home"
+            Welcome
+            <SubmitButton
+              href="/home"
               text={"Log out"}
               disabled={false}
-              onClick={() => this.doLogout()}
+              onClick={() => {
+                this.doLogout();
+              }}
             />
           </div>
         </div>
@@ -149,7 +177,9 @@ class LoginForm extends React.Component {
             <SubmitButton
               text="Login"
               disabled={this.state.buttonDisabled}
-              onClick={() => this.doLogin()}
+              onClick={() => {
+                this.doLogin();
+              }}
             />
           </div>
         </div>
