@@ -1,18 +1,41 @@
-import { React, Component } from "react";
+import { React, Component, Fragment } from "react";
 import axios from "axios";
 import * as ReactBootStrap from "react-bootstrap";
 
 import AddWeather from "../components/HomePage/WeatherModal";
+import WeatherRow from "../components/HomePage/WeatherRow";
+import EditableWeatherRow from "../components/HomePage/EditableWeatherRow";
 
 class HomePage extends Component {
-  state = {};
+  state = {
+    weather: {
+      forecast: null,
+      temperature: null,
+      date: null,
+      locationId: null,
+    },
+    editWeatherId: null,
+    location: null,
+  };
 
+  // state management
+  handleSelect = (id) => {
+    // console.log("locationId: " + id);
+    this.setState({ locationId: id });
+  };
+
+  handleEdit = (event, id) => {
+    event.preventDefault();
+    this.setState({ editWeatherId: id });
+  };
+
+  // on page load
   componentDidMount() {
     function getLocations() {
       return axios.get(`location/`);
     }
 
-    function getWeather(id) {
+    function getWeather() {
       const defaultLocation = 1;
       return axios.get(`weather/${defaultLocation}`);
     }
@@ -21,7 +44,7 @@ class HomePage extends Component {
       .all([getLocations(), getWeather()])
       .then(
         axios.spread(function (locationsResponse, weatherResponse) {
-          console.log(locationsResponse.data);
+          // console.log(locationsResponse.data);
           console.log(weatherResponse.data);
           return {
             locations: locationsResponse.data.locations,
@@ -39,11 +62,7 @@ class HomePage extends Component {
       .catch((err) => console.error(err));
   }
 
-  handleSelect = (id) => {
-    console.log("locationId: " + id);
-    this.setState({ locationId: id });
-  };
-
+  // api calls
   fetchWeather = () => {
     axios
       .get(`weather/${this.state.locationId}`)
@@ -54,33 +73,50 @@ class HomePage extends Component {
       .catch((err) => console.error(err));
   };
 
-  addWeather = (forecast, temperature, date) => {
-    
+  addWeather = (forecast, temperature) => {
     const body = {
       forecast,
       temperature,
-      date,
+      date: this.state.weather.date,
       locationId: this.state.locationId,
     };
     axios
       .post(`weather/create`, body)
+      .then((res) => {
+        // console.log(res);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  editWeather = (forecast, temperature, index) => {
+    const body = {
+      forecast: forecast,
+      temperature: temperature,
+      date: this.state.weather[index].date,
+    };
+    console.log(body);
+
+    axios
+      .put(`weather/edit`, body)
       .then((res) => {
         console.log(res);
       })
       .catch((err) => console.error(err));
   };
 
-  renderWeather = (weather, index) => {
-    return (
-      <tr key={index}>
-        <td>{weather.forecast}</td>
-        <td>{weather.temperature}</td>
-        <td>{weather.date}</td>
-        <td>{weather.locationId}</td>
-      </tr>
-    );
+  deleteWeather = (index) => {
+    const id = this.state.weather[index].id;
+    console.log("deleting weather row w/ id: " + id);
+
+    axios
+      .delete(`weather/delete/${id}`)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.error(err));
   };
 
+  // render components
   renderLocations = (location, index) => {
     return (
       <ReactBootStrap.Dropdown.Item
@@ -102,27 +138,52 @@ class HomePage extends Component {
             <ReactBootStrap.Container fluid="">
               <ReactBootStrap.Row>
                 <ReactBootStrap.Col>
-                  <h2>Weather Data </h2>
+                  <h1 align="Center">Weather Data</h1>
+                  <h3>(Edit Table Data by Clicking on Cell)</h3>
                 </ReactBootStrap.Col>
               </ReactBootStrap.Row>
             </ReactBootStrap.Container>
           </div>
 
           <div>
-            <ReactBootStrap.Container>
+            <ReactBootStrap.Container fluid>
               <ReactBootStrap.Row>
                 <ReactBootStrap.Col>
-                  <ReactBootStrap.Table striped bordered hover variant="dark">
-                    <thead>
-                      <tr>
-                        <th>Forecast</th>
-                        <th>Temperature</th>
-                        <th>Date</th>
-                        <th>Location Id</th>
-                      </tr>
-                    </thead>
-                    <tbody>{this.state.weather.map(this.renderWeather)}</tbody>
-                  </ReactBootStrap.Table>
+                  <form>
+                    <ReactBootStrap.Table striped bordered hover variant="dark">
+                      <thead>
+                        <tr>
+                          <th>Forecast</th>
+                          <th>Temperature</th>
+                          <th>Date</th>
+                          <th>Location Id</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.weather.map((weather, index) => (
+                          <Fragment>
+                            {this.state.editWeatherId === index ? (
+                              <EditableWeatherRow
+                                locationId={1}
+                                api={this.editWeather}
+                                date={this.state.weather[index].date}
+                                index={index}
+                                weather={this.state.weather}
+                              />
+                            ) : (
+                              <WeatherRow
+                                weather={weather}
+                                index={index}
+                                edit={this.handleEdit}
+                                delete={this.deleteWeather}
+                              />
+                            )}
+                          </Fragment>
+                        ))}
+                      </tbody>
+                    </ReactBootStrap.Table>
+                  </form>
                 </ReactBootStrap.Col>
                 <ReactBootStrap.Col>
                   <AddWeather api={this.addWeather} />
