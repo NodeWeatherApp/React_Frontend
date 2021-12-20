@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 
 class WeatherModal extends React.Component {
@@ -13,11 +13,10 @@ class WeatherModal extends React.Component {
     this.date = React.createRef();
   }
 
-
   handleSubmit(event) {
-      const forecast = this.forecast.current.value;
-      const temperature = this.temperature.current.value;
-      const date = this.date.current.value;
+    const forecast = this.forecast.current.value;
+    const temperature = this.temperature.current.value;
+    const date = this.date.current.value;
     alert(
       `Weather Data Submitted: \n
       forecast: ${forecast}, \n 
@@ -25,7 +24,7 @@ class WeatherModal extends React.Component {
       date: ${date}`
     );
     // call api
-    this.props.api(forecast,temperature,date);
+    this.props.api(forecast, temperature, date);
     event.preventDefault();
   }
 
