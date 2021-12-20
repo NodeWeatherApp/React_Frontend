@@ -54,6 +54,22 @@ class HomePage extends Component {
       .catch((err) => console.error(err));
   };
 
+  addWeather = (forecast, temperature, date) => {
+    
+    const body = {
+      forecast,
+      temperature,
+      date,
+      locationId: this.state.locationId,
+    };
+    axios
+      .post(`weather/create`, body)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => console.error(err));
+  };
+
   renderWeather = (weather, index) => {
     return (
       <tr key={index}>
@@ -82,40 +98,47 @@ class HomePage extends Component {
     if (this.state.locations) {
       return (
         <div>
-          <ReactBootStrap.Container fluid>
-            <ReactBootStrap.Row>
-              <ReactBootStrap.Col>
-                <h2>Weather Data </h2>
-              </ReactBootStrap.Col>
-              <ReactBootStrap.Col>
-                <AddWeather />
-              </ReactBootStrap.Col>
-            </ReactBootStrap.Row>
-          </ReactBootStrap.Container>
+          <div>
+            <ReactBootStrap.Container fluid="">
+              <ReactBootStrap.Row>
+                <ReactBootStrap.Col>
+                  <h2>Weather Data </h2>
+                </ReactBootStrap.Col>
+              </ReactBootStrap.Row>
+            </ReactBootStrap.Container>
+          </div>
 
           <div>
-            <ReactBootStrap.DropdownButton
-              id="dropdown-basic-button"
-              title="Dropdown button"
-              variant="primary"
-              onSelect={this.handleSelect}
-            >
-              {this.state.locations.map(this.renderLocations)}
-            </ReactBootStrap.DropdownButton>
+            <ReactBootStrap.Container>
+              <ReactBootStrap.Row>
+                <ReactBootStrap.Col>
+                  <ReactBootStrap.Table striped bordered hover variant="dark">
+                    <thead>
+                      <tr>
+                        <th>Forecast</th>
+                        <th>Temperature</th>
+                        <th>Date</th>
+                        <th>Location Id</th>
+                      </tr>
+                    </thead>
+                    <tbody>{this.state.weather.map(this.renderWeather)}</tbody>
+                  </ReactBootStrap.Table>
+                </ReactBootStrap.Col>
+                <ReactBootStrap.Col>
+                  <AddWeather api={this.addWeather} />
+                  <ReactBootStrap.DropdownButton
+                    id="dropdown-basic-button"
+                    title="Select Location"
+                    variant="primary"
+                    onSelect={this.handleSelect}
+                  >
+                    {this.state.locations.map(this.renderLocations)}
+                  </ReactBootStrap.DropdownButton>
+                </ReactBootStrap.Col>
+              </ReactBootStrap.Row>
+            </ReactBootStrap.Container>
           </div>
-          <div>
-            <ReactBootStrap.Table striped bordered hover variant="dark">
-              <thead>
-                <tr>
-                  <th>Forecast</th>
-                  <th>Temperature</th>
-                  <th>Date</th>
-                  <th>Location Id</th>
-                </tr>
-              </thead>
-              <tbody>{this.state.weather.map(this.renderWeather)}</tbody>
-            </ReactBootStrap.Table>
-          </div>
+          <div></div>
         </div>
       );
     }
