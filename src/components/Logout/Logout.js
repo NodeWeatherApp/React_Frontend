@@ -21,8 +21,10 @@
         const token = responseJson.token;
         console.log(token);
         localStorage.setItem("jwt", token);
+        console.log("jwt token deleted" + token);
       })
       .catch((error) => {
+        console.log('err');
         console.log(error);
       });
 
