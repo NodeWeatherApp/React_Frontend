@@ -118,7 +118,6 @@ class HomePage extends Component {
         console.log(res);
       })
       .catch((err) => console.error(err));
-      window.location.reload(false);
   };
 
   // render components
