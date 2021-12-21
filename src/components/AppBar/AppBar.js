@@ -39,7 +39,7 @@ class AppBar extends React.Component {
       <Navbar bg="light" expand={false}>
         <Container fluid>
           <Navbar.Brand href="/">
-            {!UserStore.loggedIn ? "Welcome " : "Welcome"}
+            {"Welcome"}
             {UserStore.username}
           </Navbar.Brand>
           <Navbar.Brand href="/home">
@@ -49,7 +49,7 @@ class AppBar extends React.Component {
             <button>Login</button>
           </Navbar.Brand>
           <Navbar.Brand href="/logout">
-            <button onClick={(event) => {event.preventDefault(); this.doLogout()}}>Logout</button>
+            <button onClick={(event) => {}}>Logout</button>
           </Navbar.Brand>
           <Navbar.Brand href="/signUp">
             <button>SignUp</button>
