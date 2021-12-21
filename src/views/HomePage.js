@@ -75,11 +75,11 @@ class HomePage extends Component {
       .catch((err) => console.error(err));
   };
 
-  addWeather = (forecast, temperature) => {
+  addWeather = (forecast, temperature, date) => {
     const body = {
       forecast,
       temperature,
-      date: this.state.weather.date,
+      date: date,
       locationId: this.state.locationId,
     };
     alert('body:' + body.date);
