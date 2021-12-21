@@ -5,6 +5,7 @@ import UserStore from "../../stores/UserStore";
 
 class AppBar extends React.Component {
   async doLogout() {
+    console.log('logging out');
     const url = "https://node-mysql-deploy-heroku.herokuapp.com/user/logout";
     const requestOptions = {
       method: "POST",
@@ -48,7 +49,7 @@ class AppBar extends React.Component {
             <button>Login</button>
           </Navbar.Brand>
           <Navbar.Brand href="/logout">
-            <button onClick={() => this.doLogout()}>Logout</button>
+            <button onClick={this.doLogout()}>Logout</button>
           </Navbar.Brand>
           <Navbar.Brand href="/signUp">
             <button>SignUp</button>
