@@ -8,6 +8,10 @@ class WeatherRow extends React.Component {
     this.state = {};
   }
 
+  findCountry(id) {
+    return this.props.locations.find(location => location.id === id).country
+  }
+
 
   render() {
     return (
@@ -15,7 +19,7 @@ class WeatherRow extends React.Component {
         <td>{this.props.weather.forecast}</td>
         <td>{this.props.weather.temperature}</td>
         <td>{this.props.weather.date}</td>
-        <td>{this.props.weather.locationId}</td>
+        <td>{this.findCountry(this.props.weather.locationId)}</td>
         <td>
           <Button
             size="lg"

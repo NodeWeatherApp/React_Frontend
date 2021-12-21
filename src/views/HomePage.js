@@ -186,6 +186,7 @@ class HomePage extends Component {
                                 index={index}
                                 edit={this.handleEdit}
                                 delete={this.deleteWeather}
+                                locations={this.state.locations}
                               />
                             )}
                           </Fragment>
