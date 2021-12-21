@@ -49,7 +49,7 @@ class AppBar extends React.Component {
             <button>Login</button>
           </Navbar.Brand>
           <Navbar.Brand href="/logout">
-            <button onClick={this.doLogout()}>Logout</button>
+            <button onClick={() => this.doLogout()}>Logout</button>
           </Navbar.Brand>
           <Navbar.Brand href="/signUp">
             <button>SignUp</button>
