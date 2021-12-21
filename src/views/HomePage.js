@@ -82,7 +82,7 @@ class HomePage extends Component {
       date: this.state.weather.date,
       locationId: this.state.locationId,
     };
-    console.log('body:' + body);
+    alert('body:' + body.date);
     axios
       .post(`weather/create`, body)
       .then((res) => {
