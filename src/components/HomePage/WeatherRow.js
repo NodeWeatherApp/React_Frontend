@@ -9,7 +9,7 @@ class WeatherRow extends React.Component {
   }
 
   findCountry(id) {
-    const location = this.props.locations.filter((location) => location.id === id);
+    const location = this.props.locations.find((location) => location.id === id);
     console.log('location: ' + location.country)
     // const locations = this.props.locations;
     // console.log('locations: '+ locations.filter((location));
