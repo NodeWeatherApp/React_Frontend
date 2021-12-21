@@ -76,115 +76,62 @@ class LoginForm extends React.Component {
     });
   }
 
-  async doLogout() {
-    const url = "http://localhost:3000/user/logout";
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    };
-    
-     await fetch(url, requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong with Logout");
-        }
-      })
-      .then((responseJson) => {
-        console.log(responseJson);
-        const token = responseJson.token;
-        console.log(token);
-        localStorage.setItem("jwt", token);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    this.setState({
-      buttonDisabled: false,
-    });
-  }
-
-  async isLoggedIn() {
-    const url = "http://localhost:3000/user/isLoggedIn";
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "auth-token": localStorage.getItem("jwt"),
-      },
-    };
-    let res = null
-    await fetch(url, requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong with check");
-        }
-      })
-      .then((responseJson) => {
-        console.log(responseJson.auth);
-        res = responseJson.auth;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-      UserStore.isLoggedIn = res;
-      return res;
-  }
+  // async isLoggedIn() {
+  //   const url = "http://localhost:3000/user/isLoggedIn";
+  //   const requestOptions = {
+  //     method: "POST",
+  //     headers: {
+  //       accept: "application/json",
+  //       "auth-token": localStorage.getItem("jwt"),
+  //     },
+  //   };
+  //   let res = null;
+  //   await fetch(url, requestOptions)
+  //     .then((response) => {
+  //       if (response.ok) {
+  //         return response.json();
+  //       } else {
+  //         throw new Error("Something went wrong with check");
+  //       }
+  //     })
+  //     .then((responseJson) => {
+  //       console.log(responseJson.auth);
+  //       res = responseJson.auth;
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   UserStore.isLoggedIn = res;
+  //   return res;
+  // }
 
   render() {
-    let loggedIn = this.isLoggedIn();
-    console.log(loggedIn)
-    if (UserStore.isLoggedIn) {
-      return (
-        <div className="app">
-          <div className="container">
-            Welcome
-            <SubmitButton
-              href="/home"
-              text={"Log out"}
-              disabled={false}
-              onClick={() => {
-                this.doLogout();
-              }}
-            />
-          </div>
+    return (
+      <div className="container">
+        <div className="loginform">
+          Log in
+          <InputField
+            type="email"
+            placeholder="Email"
+            value={this.state.email ? this.state.email : ""}
+            onChange={(val) => this.setInputValue("email", val)}
+          />
+          <InputField
+            type="password"
+            placeholder="Password"
+            value={this.state.password ? this.state.password : ""}
+            onChange={(val) => this.setInputValue("password", val)}
+          />
+          <SubmitButton
+            text="Login"
+            disabled={this.state.buttonDisabled}
+            onClick={() => {
+              this.doLogin();
+            }}
+          />
         </div>
-      );
-    } else {
-      return (
-        <div className="container">
-          <div className="loginform">
-            Log in
-            <InputField
-              type="email"
-              placeholder="Email"
-              value={this.state.email ? this.state.email : ""}
-              onChange={(val) => this.setInputValue("email", val)}
-            />
-            <InputField
-              type="password"
-              placeholder="Password"
-              value={this.state.password ? this.state.password : ""}
-              onChange={(val) => this.setInputValue("password", val)}
-            />
-            <SubmitButton
-              text="Login"
-              disabled={this.state.buttonDisabled}
-              onClick={() => {
-                this.doLogin();
-              }}
-            />
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 }
 
