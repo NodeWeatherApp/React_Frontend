@@ -46,6 +46,8 @@ class HomePage extends Component {
         axios.spread(function (locationsResponse, weatherResponse) {
           console.log(locationsResponse.data);
           // console.log(weatherResponse.data);
+          // console.log(locationsResponse.data);
+          console.log(weatherResponse.data);
           return {
             locations: locationsResponse.data.locations,
             weather: weatherResponse.data.weather,
