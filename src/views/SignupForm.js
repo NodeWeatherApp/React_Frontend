@@ -39,7 +39,7 @@ class SignupForm extends React.Component {
       buttonDisabled: true,
     });
 
-    const url = "http://localhost:3000/user/signUp";
+    const url = "https://node-mysql-deploy-heroku.herokuapp.com/user/signUp";
     const requestOptions = {
       method: "POST",
       headers: {

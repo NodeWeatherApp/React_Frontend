@@ -34,7 +34,7 @@ class LoginForm extends React.Component {
       buttonDisabled: true,
     });
 
-    const url = "http://localhost:3000/user/login";
+    const url = "https://node-mysql-deploy-heroku.herokuapp.com/user/login";
     const requestOptions = {
       method: "POST",
       headers: {

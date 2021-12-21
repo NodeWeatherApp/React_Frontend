@@ -1,5 +1,5 @@
  function doLogout() {
-    const url = "http://localhost:3000/user/logout";
+    const url = "https://node-mysql-deploy-heroku.herokuapp.com/logout";
     const requestOptions = {
       method: "POST",
       headers: {
