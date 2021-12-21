@@ -8,9 +8,6 @@ class WeatherRow extends React.Component {
     this.state = {};
   }
 
-  findCountry(id) {
-    this.props.locations.find(location => location.id === id).foo
-  }
 
 
   render() {
