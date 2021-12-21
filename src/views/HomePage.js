@@ -164,7 +164,7 @@ class HomePage extends Component {
                           <th>Forecast</th>
                           <th>Temperature</th>
                           <th>Date</th>
-                          <th>Location Id</th>
+                          <th>Location</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
