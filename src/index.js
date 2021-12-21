@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-axios.defaults.baseURL = "http://localhost:3000/";
+axios.defaults.baseURL = "https://node-mysql-deploy-heroku.herokuapp.com/";
 axios.defaults.headers.common['auth-token'] = localStorage.getItem("jwt");
 
 ReactDOM.render(

@@ -44,6 +44,8 @@ class HomePage extends Component {
       .all([getLocations(), getWeather()])
       .then(
         axios.spread(function (locationsResponse, weatherResponse) {
+          console.log(locationsResponse.data);
+          // console.log(weatherResponse.data);
           // console.log(locationsResponse.data);
           console.log(weatherResponse.data);
           return {
@@ -139,7 +141,11 @@ class HomePage extends Component {
               <ReactBootStrap.Row>
                 <ReactBootStrap.Col>
                   <h1 align="Center">Weather Data</h1>
-                  <h3>(Edit Table Data by Clicking on Cell)</h3>
+                  <h3 align="Center">(Start By Selecting a Location)</h3>
+                  <h3 align="Center">(State Issue, Click Twice on Location to change location)</h3>
+                  <h3 align="Center">
+                    (Edit or Delete Row by Clicking on Actions Cell)
+                  </h3>
                 </ReactBootStrap.Col>
               </ReactBootStrap.Row>
             </ReactBootStrap.Container>

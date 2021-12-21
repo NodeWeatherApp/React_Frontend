@@ -4,6 +4,7 @@ import SubmitButton from "../components/Login/SubmitButton";
 import UserStore from "../stores/UserStore";
 
 class SignupForm extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -23,9 +24,9 @@ class SignupForm extends React.Component {
     });
   }
 
-  async doSignup() {
-    if (!this.state.email) {
-      return;
+  async doSignup(event) {
+    if (!this.state.email || this.state.email.length < 6) {
+      return ;
     }
     if (!this.state.password) {
       return;
@@ -38,7 +39,7 @@ class SignupForm extends React.Component {
       buttonDisabled: true,
     });
 
-    const url = "http://localhost:3000/user/signUp";
+    const url = "https://node-mysql-deploy-heroku.herokuapp.com/user/signUp";
     const requestOptions = {
       method: "POST",
       headers: {
@@ -67,11 +68,14 @@ class SignupForm extends React.Component {
         const token = responseJson.token;
         UserStore.token = token;
         UserStore.username = this.username;
-        // localStorage.setItem("jwt", token);
+       
+        localStorage.setItem("jwt", token);
+        this.resetForm()
       })
       .catch((error) => {
         console.log(error);
         this.resetForm();
+        event.preventDefault()
       });
   }
 
@@ -86,8 +90,9 @@ class SignupForm extends React.Component {
 
   render() {
     return (
-      <div className="loginform">
+      <div align="Center" className="loginform">
         Sign Up
+        <div></div>
         <InputField
           type="email"
           placeholder="Email"
@@ -109,8 +114,10 @@ class SignupForm extends React.Component {
         <SubmitButton
           text="Sign Up"
           // disabled={this.state.buttonDisabled}
-          onClick={() => this.doSignup()}
+          onClick={(event) => this.doSignup(event)}
         />
+        <div>(Username must be at least 4 characters)</div>
+        <div>(Password must be at least 6 characters)</div>
       </div>
     );
   }
